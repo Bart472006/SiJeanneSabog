@@ -1,151 +1,78 @@
-# Deadlock Prevention Program using Banker's Algorithm
-
-print("="*60)
-print("DEADLOCK PREVENTION USING BANKER'S ALGORITHM")
-print("="*60)
-
-# Step 1: Get number of processes and resources
-processes = int(input("Enter number of processes: "))
-resources = int(input("Enter number of resources: "))
-
-# Step 2: Get available resources
-print("\nEnter available resources:")
-available = []
-for i in range(resources):
-    val = int(input(f"Resource {i}: "))
-    available.append(val)
-
-# Step 3: Get allocation matrix
-print("\nEnter ALLOCATION matrix:")
-allocation = []
-for i in range(processes):
-    print(f"Process {i}:")
-    row = []
-    for j in range(resources):
-        val = int(input(f"  Resource {j}: "))
-        row.append(val)
-    allocation.append(row)
-
-# Step 4: Get max matrix
-print("\nEnter MAX matrix:")
-maximum = []
-for i in range(processes):
-    print(f"Process {i}:")
-    row = []
-    for j in range(resources):
-        val = int(input(f"  Resource {j}: "))
-        row.append(val)
-    maximum.append(row)
-
-# Step 5: Calculate need matrix (max - allocation)
-print("\n" + "="*60)
-print("CALCULATING NEED MATRIX...")
-need = []
-for i in range(processes):
-    row = []
-    for j in range(resources):
-        row.append(maximum[i][j] - allocation[i][j])
-    need.append(row)
-
-# Display all matrices
-print("\n=== CURRENT SYSTEM STATE ===")
-print("\nAllocation Matrix:")
-for i in range(processes):
-    print(f"P{i}: {allocation[i]}")
-
-print("\nMax Matrix:")
-for i in range(processes):
-    print(f"P{i}: {maximum[i]}")
-
-print("\nNeed Matrix:")
-for i in range(processes):
-    print(f"P{i}: {need[i]}")
-
-print(f"\nAvailable Resources: {available}")
-
-# Step 6: Check if system is in safe state
-print("\n" + "="*60)
-print("CHECKING SAFE STATE...")
-
-work = available.copy()
-finish = [False] * processes
-safe_sequence = []
-
-# Try to find a safe sequence
-step = 1
-while len(safe_sequence) < processes:
-    found = False
+def main():
+    # Initialize variables
+    alloc = [[0 for _ in range(10)] for _ in range(10)]
+    max_claim = [[0 for _ in range(10)] for _ in range(10)]
+    need = [[0 for _ in range(10)] for _ in range(10)]
+    avail = [0] * 10
+    work = [0] * 10
+    total = [0] * 10
+    finish = ['n'] * 10
     
-    for i in range(processes):
-        if not finish[i]:
-            # Check if need <= work
-            can_allocate = True
-            for j in range(resources):
-                if need[i][j] > work[j]:
-                    can_allocate = False
-                    break
+    # Get input
+    print("Enter the no. of processes and resources:", end=" ")
+    n, m = map(int, input().split())
+    
+    print("Enter the claim matrix:")
+    for i in range(n):
+        row = list(map(int, input().split()))
+        for j in range(m):
+            max_claim[i][j] = row[j]
+    
+    print("Enter the allocation matrix:")
+    for i in range(n):
+        row = list(map(int, input().split()))
+        for j in range(m):
+            alloc[i][j] = row[j]
+    
+    print("Resource vector:", end=" ")
+    total_input = list(map(int, input().split()))
+    for i in range(m):
+        total[i] = total_input[i]
+    
+    # Calculate available resources
+    for i in range(m):
+        avail[i] = 0
+    
+    for i in range(n):
+        for j in range(m):
+            avail[j] += alloc[i][j]
+    
+    # Calculate work (available resources)
+    for i in range(m):
+        work[i] = avail[i]
+    
+    for j in range(m):
+        work[j] = total[j] - work[j]
+    
+    # Calculate need matrix
+    for i in range(n):
+        for j in range(m):
+            need[i][j] = max_claim[i][j] - alloc[i][j]
+    
+    # Banker's Algorithm
+    count = 0
+    while count != n:
+        for i in range(n):
+            c = 0
+            for j in range(m):
+                if need[i][j] <= work[j] and finish[i] == 'n':
+                    c += 1
             
-            if can_allocate:
-                print(f"\nStep {step}: Process P{i} can execute")
-                print(f"  Work before: {work}")
-                print(f"  Need: {need[i]}")
+            if c == m:
+                print(f"All the resources can be allocated to Process {i+1}")
+                print("\nAvailable resources are:", end=" ")
                 
-                # Add allocated resources back to work
-                for j in range(resources):
-                    work[j] += allocation[i][j]
+                for k in range(m):
+                    work[k] += alloc[i][k]
+                    print(f"{work[k]:4d}", end="")
                 
-                print(f"  Work after: {work}")
-                
-                finish[i] = True
-                safe_sequence.append(f"P{i}")
-                found = True
-                step += 1
-                break
+                print()
+                finish[i] = 'y'
+                print(f"\nProcess {i+1} executed?: {finish[i]}")
+                count += 1
     
-    if not found:
-        break
+    print("\nSystem is in safe mode")
+    print("The given state is safe state")
 
-# Step 7: Display result
-print("\n" + "="*60)
-if len(safe_sequence) == processes:
-    print("✓ SYSTEM IS IN SAFE STATE")
-    print(f"Safe Sequence: {' → '.join(safe_sequence)}")
-else:
-    print("✗ SYSTEM IS IN UNSAFE STATE")
-    print("Deadlock may occur if allocation continues!")
-
-# Optional: Check if a specific request can be granted
-print("\n" + "="*60)
-check_request = input("Do you want to check a resource request? (yes/no): ").lower()
-
-if check_request == "yes":
-    print("\n=== CHECK RESOURCE REQUEST ===")
-    p = int(input(f"Enter process number (0 to {processes-1}): "))
-    
-    if p < 0 or p >= processes:
-        print("Invalid process number!")
-    else:
-        print("Enter requested resources:")
-        request = []
-        for j in range(resources):
-            val = int(input(f"  Resource {j}: "))
-            request.append(val)
-        
-        # Check if request is valid
-        valid = True
-        for j in range(resources):
-            if request[j] > need[p][j]:
-                print(f"Error: Request exceeds need for Resource {j}")
-                valid = False
-                break
-            if request[j] > available[j]:
-                print(f"Error: Request exceeds available for Resource {j}")
-                valid = False
-                break
-        
-        if valid:
-            print("\nRequest can be granted (assuming it leads to safe state)")
-        else:
-            print("\nRequest cannot be granted!")
-
-print("\nProgram completed!")
+if __name__ == "__main__":
+    main()
