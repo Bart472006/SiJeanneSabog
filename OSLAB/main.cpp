@@ -1,4 +1,5 @@
 #include<iostream>
+#include <iomanip> 
 #include<fstream>
 #include "RR.h"
 #include "fifo.h"
@@ -9,7 +10,7 @@ void fifo(void)
 {
     int n,bt[20],wt[20],tat[20],avwt=0,avtat=0,i,j;
     int numberOfProcessus;
-    cout<<"Entrer le nombre des processus(maximum 20):";
+    cout<<"Entrer le nombre des processus(maximum 20):"; //Enter the number of processes (maximum 20):
     cin>>n;
 
 
@@ -24,9 +25,9 @@ void fifo(void)
     numberOfProcessus = i;
 
 
-    wt[0]=0;    //temps d'attente du premier processus est 0
+    wt[0]=0;    //temps d'attente du premier processus est 0 () //The waiting time for the first process is 0 ()
 
-    //calcul du temps d'attente
+    //calcul du temps d'attente //calculation of waiting time
     for(i=1;i<n;i++)
     {
         wt[i]=0;
@@ -47,37 +48,36 @@ void fifo(void)
 
     avwt/=i;
     avtat/=i;
-    cout<<"\n\nMoyenne de Temps d'Attente:"<<avwt;
-    cout<<"\nMoyenne de Temps de Rotation:"<<avtat;
+    cout<<"\n\nMoyenne de Temps d'Attente:"<<avwt; //Average Waiting Time
+    cout<<"\nMoyenne de Temps de Rotation:"<<avtat; //Average Rotation Time:
 
 }
 void RR(void)
 {
-    // initialisation des variables
+    // initialisation des variables //initialization of variables
     int i, NOP, sum=0,count=0, y, quant, wt=0, tat=0, at[10], bt[10], temp[10];
     float avg_wt, avg_tat;
-   cout<<" Entrer le nombre des processus (maximum 10): ";
+   cout<<" Entrer le nombre des processus (maximum 10): "; //Enter the number of processes (maximum 10)
    cin>>NOP;
-    y = NOP; // Assigner le nombre du processus a la variable y
-
+    y = NOP; // Assigner le nombre du processus a la variable y //Assign the process number to the variable y
 
 for(i=0; i<NOP; i++)
 {
-cout<<"\n Enter le temps d arrive et d execution :" ;
-cout<<" Temps d'arrive : ";  // temps d'arrive
+cout<<"\n Enter le temps d arrive et d execution :" ; //Enter the arrival and execution time
+cout<<" Temps d'arrive : ";  // Arrival time
 cin>>at[i];
-cout<<" \nTemps d'execution : "; // temps d'execution
+cout<<" \nTemps d'execution : "; // execution time
 cin >>bt[i];
-temp[i] = bt[i]; // enregistrer temps d'execution dans l'array
+temp[i] = bt[i]; // record execution time in the array
 }
 // Quantum
-cout<<"Entrer le Quantum pour le processus:";
+cout<<"Entrer le Quantum pour le processus:"; //Enter the quantum for the process
 cin>>quant;
-// Affichage de :the process No, burst time, Turn Around Time and the waiting time
+// Display: the process number, burst time, turn-around time, and waiting time
 cout<<"\n Process  \t\t Burst Time \t\t Turnaround Time \t\t Waiting Time ";
 for(sum=0, i = 0; y!=0; )
 {
-if(temp[i] <= quant && temp[i] > 0) // definir les conditions
+if(temp[i] <= quant && temp[i] > 0) // Define the conditions
 {
     sum = sum + temp[i];
     temp[i] = 0;
@@ -90,7 +90,7 @@ if(temp[i] <= quant && temp[i] > 0) // definir les conditions
     }
     if(temp[i]==0 && count==1)
     {
-        y--; //decrementer le numero du processus
+        y--; //Decrement the process number
         cout<<"\nProcess "<<i+1<<" \t\t" << bt[i]<<"\t\t\t\t" << sum-at[i]<<"\t\t\t"<< sum-at[i]-bt[i];
         wt = wt+sum-at[i]-bt[i];
         tat = tat+sum-at[i];
@@ -109,24 +109,24 @@ if(temp[i] <= quant && temp[i] > 0) // definir les conditions
         i=0;
     }
 }
-//Moyenne de Temps d'Attente et Moyenne de Temps de Rotation
+//Average Waiting Time and Average Turnaround Time
 avg_wt = wt * 1.0/NOP;
 avg_tat = tat * 1.0/NOP;
-printf("\n Moyenne de Temps d'Attente: \t%f", avg_wt);
-printf("\n Moyenne de Temps de Rotation: \t%f", avg_tat);
+printf("\n Moyenne de Temps d'Attente: \t%f", avg_wt); //Average Waiting Time:
+printf("\n Moyenne de Temps de Rotation: \t%f", avg_tat); //Average Rotation Time
 
 }
 void sjf(void)
 {
-// initlialiser les variables
+// initlialiser les variables //Initialize the variables
       int n,temp,tt=0,min,d,i,j, a[n],b[n],e[n],tat[n],wt[n];
       int numberOfProcessus;
       float avtat=0,avwt=0,stat=0,swt=0;
 
-      cout<<"Entrer le nombre des processus (maximum 10):"<<endl;
+      cout<<"Entrer le nombre des processus (maximum 10):"<<endl; //Enter the number of processes (maximum 10)
       cin>>n;
 
-// lecture des details comme le temps d'arrive et temps d'execution
+// lecture des details comme le temps d'arrive et temps d'execution //Read the details such as arrival time and execution time
 
       ifstream inputFile ;
     inputFile.open("burst.txt");
@@ -144,7 +144,7 @@ void sjf(void)
        halFile >> a[i];
         i++;
     }
-    numberOfProcessus = i;// assigner le nombre de processus a la variable i
+    numberOfProcessus = i;// assigner le nombre de processus a la variable i //Assign the number of processes to the variable i
 
 
 
@@ -203,7 +203,7 @@ void sjf(void)
     cout<<"P"<<i+1<<"              "<<a[i]<<"                "<<b[i]<<"                  "<<wt[i]<<"               "<<tat[i]<<endl;
     }
 
-    cout<<"Moyenne de Temps d'Attente:"<<avwt<<" Moyenne de temps de Rotation:"<<avtat;  //Moyenne de Temps d'Attente et Moyenne de temps de Rotation
+    cout<<"Moyenne de Temps d'Attente:"<<avwt<<" Moyenne de temps de Rotation:"<<avtat;  //Average Waiting Time and Average Turnover Time
 }
 
 void mq(void)
@@ -283,10 +283,198 @@ cout<<"\nMoyenne de Temps de Rotation:"<<tatavg/n;
 }
 
 void propermlq()
-[
+{
+    int n, i;
+    int bt[20];
 
-    rr()
-]
+    // 3 Queues
+    int rr_bt[20], sjf_bt[20], fcfs_bt[20];
+    int rr_index[20], sjf_index[20], fcfs_index[20];
+
+    int rr_n = 0, sjf_n = 0, fcfs_n = 0;
+
+    float global_wt = 0;
+    float global_tat = 0;
+    int total_process = 0;
+
+    cout << "Enter number of processes (max 20): ";
+    cin >> n;
+
+    ifstream burstFile("burstMQ.txt");
+    if(!burstFile.is_open())
+    {
+        cout << "Error opening burstMQ.txt\n";
+        return;
+    }
+
+    for(i=0;i<n;i++)
+        burstFile >> bt[i];
+
+    // Assign queues
+    for(i=0;i<n;i++)
+    {
+        int q;
+        cout << "Process P" << i+1 << " choose queue:\n";
+        cout << "1. Round Robin\n2. SJF\n3. FCFS\nChoice: ";
+        cin >> q;
+
+        if(q==1)
+        {
+            rr_bt[rr_n] = bt[i];
+            rr_index[rr_n] = i+1;
+            rr_n++;
+        }
+        else if(q==2)
+        {
+            sjf_bt[sjf_n] = bt[i];
+            sjf_index[sjf_n] = i+1;
+            sjf_n++;
+        }
+        else
+        {
+            fcfs_bt[fcfs_n] = bt[i];
+            fcfs_index[fcfs_n] = i+1;
+            fcfs_n++;
+        }
+    }
+
+    // ================= ROUND ROBIN =================
+    if(rr_n > 0)
+    {
+        int quantum;
+        cout << "\nEnter Quantum for Round Robin: ";
+        cin >> quantum;
+
+        int temp[20], wt[20], tat[20];
+
+        for(i=0;i<rr_n;i++) temp[i] = rr_bt[i];
+
+        int complete=0, time=0;
+
+        while(complete < rr_n)
+        {
+            for(i=0;i<rr_n;i++)
+            {
+                if(temp[i] > 0)
+                {
+                    if(temp[i] > quantum)
+                    {
+                        time += quantum;
+                        temp[i] -= quantum;
+                    }
+                    else
+                    {
+                        time += temp[i];
+                        wt[i] = time - rr_bt[i];
+                        tat[i] = time;
+                        temp[i] = 0;
+                        complete++;
+                    }
+                }
+            }
+        }
+
+        cout << "\n=== Round Robin Queue ===\n";
+        cout << "PID\tBurst\tWaiting\tTurnaround\n";
+
+        for(i=0;i<rr_n;i++)
+        {
+            cout << "P" << rr_index[i] << "\t"
+                 << rr_bt[i] << "\t"
+                 << wt[i] << "\t"
+                 << tat[i] << endl;
+
+            global_wt += wt[i];
+            global_tat += tat[i];
+            total_process++;
+        }
+    }
+
+    // ================= SJF =================
+    if(sjf_n > 0)
+    {
+        for(i=0;i<sjf_n-1;i++)
+        {
+            for(int j=i+1;j<sjf_n;j++)
+            {
+                if(sjf_bt[j] < sjf_bt[i])
+                {
+                    swap(sjf_bt[i], sjf_bt[j]);
+                    swap(sjf_index[i], sjf_index[j]);
+                }
+            }
+        }
+
+        int wt[20], tat[20];
+        int time = 0;
+
+        for(i=0;i<sjf_n;i++)
+        {
+            wt[i] = time;
+            time += sjf_bt[i];
+            tat[i] = time;
+        }
+
+        cout << "\n=== SJF Queue ===\n";
+        cout << "PID\tBurst\tWaiting\tTurnaround\n";
+
+        for(i=0;i<sjf_n;i++)
+        {
+            cout << "P" << sjf_index[i] << "\t"
+                 << sjf_bt[i] << "\t"
+                 << wt[i] << "\t"
+                 << tat[i] << endl;
+
+            global_wt += wt[i];
+            global_tat += tat[i];
+            total_process++;
+        }
+    }
+
+    // ================= FCFS =================
+    if(fcfs_n > 0)
+    {
+        int wt[20], tat[20];
+        int time = 0;
+
+        for(i=0;i<fcfs_n;i++)
+        {
+            wt[i] = time;
+            time += fcfs_bt[i];
+            tat[i] = time;
+        }
+
+        cout << "\n=== FCFS Queue ===\n";
+        cout << "PID\tBurst\tWaiting\tTurnaround\n";
+
+        for(i=0;i<fcfs_n;i++)
+        {
+            cout << "P" << fcfs_index[i] << "\t"
+                 << fcfs_bt[i] << "\t"
+                 << wt[i] << "\t"
+                 << tat[i] << endl;
+
+            global_wt += wt[i];
+            global_tat += tat[i];
+            total_process++;
+        }
+    }
+
+    // ===== GLOBAL AVERAGES =====
+    if (total_process > 0)
+{
+    cout << "\n=====================================\n";
+
+    cout << "TOTAL Average Waiting Time: "
+         << fixed << setprecision(2)
+         << static_cast<double>(global_wt) / total_process << endl;
+
+    cout << "TOTAL Average Turnaround Time: "
+         << fixed << setprecision(2)
+         << static_cast<double>(global_tat) / total_process << endl;
+}
+}
+
 
 void admin()
 {
@@ -296,7 +484,7 @@ void admin()
 	cout<<"\n\t\t\t          BIENVENUE   \n";
 	cout<<"\n\t\t\t==============================\n\n";
 	cout<<"\n\t\t\t* * * * * * * * * * * * * * * *\n";
- 	cout<<"\n\t\t\t1. First In First Out  \n\n\t\t\t2. Multilevel Queue\n\n\t\t\t3. Shortest Job First\n\n\t\t\t4. Round Robin \n\n\t\t\t5. Quitter \n";
+ 	cout<<"\n\t\t\t1. First In First Out  \n\n\t\t\t2. Multilevel Queue\n\n\t\t\t3. Shortest Job First\n\n\t\t\t4. Round Robin \n\n\t\t\t5. Quitter \n \n\n\t\t\t6. PROPERMLQ \n";
   cout<<"\n\n\t\t\tEntrez votre choix !\n";
   int u;
   cin>>u;
@@ -316,6 +504,10 @@ if(u==1)
   {
   RR();
 }
+  else if(u==6)
+  {
+    propermlq();
+  }
 
   else if(u==5)
   {
